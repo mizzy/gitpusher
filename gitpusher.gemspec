@@ -10,8 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/mizzy/gitpusher"
   s.summary     = %q{A command line tool for replicating git repositories from one service to another.}
 
-  s.rubyforge_project = "gitpusher"
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
