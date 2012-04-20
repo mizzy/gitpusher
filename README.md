@@ -30,4 +30,4 @@ If you would like to replicate GitHub organization's repos instead of your own r
   :type: bitbucket
 ```
 
-Now this tool support only replicating from GitHub to BitBucket.
+Now this tool supports only replicating from GitHub to BitBucket.
