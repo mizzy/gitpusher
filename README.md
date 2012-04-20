@@ -6,7 +6,7 @@ gitpusher is a command line tool for replicating git repositories from one servi
 $ gitpusher -c default.yml
 ```
 
-default.yaml is like this.
+default.yml is like this.
 
 ```
 :base_dir: /var/repos
@@ -16,7 +16,7 @@ default.yaml is like this.
   :type: bitbucket
 ```
 
-With this settings, All of your repositories on GitHub will be replicated to BitBucket.
+With this settings, all of your repositories on GitHub will be replicated to BitBucket.
 (User name and password of each service are asked when you run the command first.)
 
 If you would like to replicate GitHub organization's repos instead of your own repos, settings are like this.
