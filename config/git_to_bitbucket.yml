@@ -1,3 +1,6 @@
-src:
+:base_dir: /var/repos
+:src:
+  :type: github
+:dest:
+  :type: bitbucket
 
-dest:
