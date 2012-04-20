@@ -25,7 +25,7 @@ If you would like to replicate GitHub organization's repos instead of your own r
 :base_dir: /var/repos
 :src:
   :type: github
-  :organization: github
+  :organization: github_organization_name
 :dest:
   :type: bitbucket
 ```
