@@ -1,2 +1,3 @@
 config/default.yml
 pkg
+Gemfile.lock

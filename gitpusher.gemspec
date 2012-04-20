@@ -18,5 +18,8 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # dependencies
+  s.add_dependency 'grit'
+  s.add_dependency 'octokit'
   s.add_dependency 'pit'
+  s.add_dependency 'grit'
 end
