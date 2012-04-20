@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'gitpusher'
+require 'optparse'
+
+options = {}
+op = OptionParser.new do |opts|
+  opts.on('-c', '--config FILE') do |file|
+    options[:config] = file
+  end
+end
+
+op.parse!
+
+options[:config] ||= 'config/default.yml'
+
+context = GitPusher::Context.instance
+context.home = File.join(File.dirname(__FILE__), '..')
+
+GitPusher::Config.load(options)
+
+GitPusher::Runner.run
+
