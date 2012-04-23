@@ -6,7 +6,7 @@ module GitPusher
           when /github/i     then GitPusher::Service::GitHub.new(config)
           when /bitbucket/i  then GitPusher::Service::BitBucket.new(config)
           else
-            raise "unknown issue tracker type : #{its_type}"
+            raise "unknown service type : #{config[:type]}"
         end
       end
     end
