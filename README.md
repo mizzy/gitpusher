@@ -16,7 +16,7 @@ default.yml is like this.
   :type: bitbucket
 ```
 
-With this settings, all of your repositories on GitHub will be replicated to BitBucket.
+With this settings, all of your repositories on GitHub will be replicated to Bitbucket.
 (User name and password of each service are asked when you run the command first.)
 
 If you would like to replicate GitHub organization's repos instead of your own repos, settings are like this.
@@ -30,4 +30,4 @@ If you would like to replicate GitHub organization's repos instead of your own r
   :type: bitbucket
 ```
 
-Now this tool supports only replicating from GitHub to BitBucket.
+Now this tool supports only replicating from GitHub to Bitbucket.
