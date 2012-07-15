@@ -10,8 +10,10 @@ module GitPusher
       dest = GitPusher::Service::Factory.create(context.config[:dest])
 
       base_dir = context.config[:base_dir]
-      src.repos.each do |src_repo|
-        mirror src_repo, dest, base_dir
+      Dir.chdir(base_dir) do
+        src.repos.each do |src_repo|
+          mirror src_repo, dest, base_dir
+        end
       end
     end
 
@@ -20,10 +22,8 @@ module GitPusher
       repo_name = File.basename(src_repo.url).gsub(/.git$/, '')
       repo_path = File.join(base_dir, repo_name)
       unless File.exist?(repo_path)
-        Dir.chdir(base_dir) do
-          p src_repo.url
-          `git clone #{src_repo.url}`
-        end
+        p src_repo.url
+        `git clone #{src_repo.url}`
       end
 
       local_repo = Grit::Repo.new(repo_path)
