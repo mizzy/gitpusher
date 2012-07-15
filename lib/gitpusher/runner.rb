@@ -10,11 +10,20 @@ module GitPusher
       dest = GitPusher::Service::Factory.create(context.config[:dest])
 
       base_dir = context.config[:base_dir]
+      src_repos = src.repos
+      num_per_process = src_repos.length / context.processes
+      num_per_process += 1 unless src_repos.length % context.processes == 0
       Dir.chdir(base_dir) do
-        src.repos.each do |src_repo|
-          mirror src_repo, dest, base_dir
+        src_repos.each_slice(num_per_process) do |repos|
+          fork do
+            repos.each do |src_repo|
+              mirror src_repo, dest, base_dir
+            end
+          end
         end
       end
+
+      Process.waitall
     end
 
     def self.mirror(src_repo, dest, base_dir)
