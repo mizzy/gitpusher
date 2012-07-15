@@ -8,14 +8,19 @@ op = OptionParser.new do |opts|
   opts.on('-c', '--config FILE') do |file|
     options[:config] = file
   end
+  opts.on('-p', '--process NUMBER', OptionParser::DecimalInteger) do |count|
+    options[:processes] = [1, count].max
+  end
 end
 
 op.parse!
 
 options[:config] ||= 'config/default.yml'
+options[:processes] ||= 1
 
 context = GitPusher::Context.instance
 context.home = File.join(File.dirname(__FILE__), '..')
+context.processes = options[:processes]
 
 GitPusher::Config.load(options)
 

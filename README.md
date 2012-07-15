@@ -31,3 +31,18 @@ If you would like to replicate GitHub organization's repos instead of your own r
 ```
 
 Now this tool supports only replicating from GitHub to Bitbucket.
+
+## Parallel processing
+
+You will spend a lot of time when you have many repositories.
+Now, to save your time, gitpusher supports parallel processing.
+
+You can specify the number of processes by `--process`, or `-p`, option.
+
+If you do:
+
+```
+$ gitpusher -c default.yml --process 6
+```
+
+then 6 repositories are processed at a time.
