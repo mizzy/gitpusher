@@ -27,9 +27,9 @@ module GitPusher
     end
 
     def self.mirror(src_repo, dest, base_dir)
-      puts "Cheking #{src_repo.url} ..."
       repo_name = File.basename(src_repo.url).gsub(/.git$/, '')
       repo_path = File.join(base_dir, repo_name)
+      puts "[#{Process.pid}][#{repo_name}]Cheking #{src_repo.url} ..."
       unless File.exist?(repo_path)
         p src_repo.url
         `git clone #{src_repo.url}`
@@ -63,11 +63,11 @@ module GitPusher
         end
 
         # pull する
-        puts "Pulling #{branch} ..."
+        puts "[#{Process.pid}][#{repo_name}]Pulling #{branch} ..."
         local_repo.git.pull({}, 'origin', branch)
 
         # git push mirror #{branch} する
-        puts "Pushing #{branch} ..."
+        puts "[#{Process.pid}][#{repo_name}]Pushing #{branch} ..."
         local_repo.git.push({ :timeout => 300 }, 'mirror', branch)
       end
     end
