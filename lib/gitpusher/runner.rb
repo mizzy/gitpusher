@@ -31,7 +31,6 @@ module GitPusher
       repo_path = File.join(base_dir, repo_name)
       puts "[#{Process.pid}][#{repo_name}]Cheking #{src_repo.url} ..."
       unless File.exist?(repo_path)
-        p src_repo.url
         `git clone #{src_repo.url}`
       end
 
