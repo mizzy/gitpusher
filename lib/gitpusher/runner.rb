@@ -65,7 +65,7 @@ module GitPusher
         Dir.chdir(repo_path) do
           # pull する
           puts "[#{Process.pid}][#{repo_name}]Pulling #{branch} ..."
-          local_repo.git.pull({}, 'origin', branch)
+          local_repo.git.pull({ :timeout => 300 }, 'origin', branch)
 
           # git push mirror #{branch} する
           puts "[#{Process.pid}][#{repo_name}]Pushing #{branch} ..."
