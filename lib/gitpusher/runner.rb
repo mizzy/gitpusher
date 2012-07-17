@@ -63,6 +63,8 @@ module GitPusher
         end
 
         Dir.chdir(repo_path) do
+          local_repo.git.checkout({}, branch)
+
           # pull する
           puts "[#{Process.pid}][#{repo_name}]Pulling #{branch} ..."
           local_repo.git.pull({ :timeout => 300 }, 'origin', branch)
