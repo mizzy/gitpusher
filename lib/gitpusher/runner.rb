@@ -4,10 +4,10 @@ require 'grit'
 module GitPusher
   class Runner
     def self.run
-      context = GitPusher::Context.instance
+      context = Context.instance
 
-      src  = GitPusher::Service::Factory.create(context.config[:src])
-      dest = GitPusher::Service::Factory.create(context.config[:dest])
+      src  = Service::Factory.create(context.config[:src])
+      dest = Service::Factory.create(context.config[:dest])
 
       base_dir = context.config[:base_dir]
       src_repos = src.repos
