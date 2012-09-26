@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+require 'fileutils'
 require 'grit'
 
 module GitPusher
@@ -9,6 +10,7 @@ module GitPusher
       src_repos = src.repos
       num_per_process = src_repos.length / context.processes
       num_per_process += 1 unless src_repos.length % context.processes == 0
+      FileUtils::Verbose.mkpath base_dir unless File.directory? base_dir
       Dir.chdir(base_dir) do
         src_repos.each_slice(num_per_process) do |repos|
           fork do
