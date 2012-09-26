@@ -6,10 +6,6 @@ module GitPusher
     def self.run
       context = Context.instance
 
-      src  = Service::Factory.create(context.config[:src])
-      dest = Service::Factory.create(context.config[:dest])
-
-      base_dir = context.config[:base_dir]
       src_repos = src.repos
       num_per_process = src_repos.length / context.processes
       num_per_process += 1 unless src_repos.length % context.processes == 0
@@ -73,6 +69,18 @@ module GitPusher
           local_repo.git.push({ :timeout => 300 }, 'mirror', branch)
         end
       end
+    end
+
+    def self.src
+      Service::Factory.create(Context.instance.config[:src])
+    end
+
+    def self.dest
+      Service::Factory.create(Context.instance.config[:dest])
+    end
+
+    def self.base_dir
+      Context.instance.config[:base_dir]
     end
   end
 end
