@@ -13,7 +13,7 @@ module GitPusher
         src_repos.each_slice(num_per_process) do |repos|
           fork do
             repos.each do |src_repo|
-              mirror src_repo, dest, base_dir
+              mirror src_repo
             end
           end
         end
@@ -22,7 +22,7 @@ module GitPusher
       Process.waitall
     end
 
-    def self.mirror(src_repo, dest, base_dir)
+    def self.mirror(src_repo)
       repo_name = File.basename(src_repo.url).gsub(/.git$/, '')
       repo_path = File.join(base_dir, repo_name)
       puts "[#{Process.pid}][#{repo_name}]Cheking #{src_repo.url} ..."
