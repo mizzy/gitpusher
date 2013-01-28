@@ -34,7 +34,6 @@ module GitPusher
 
       local_repo = Grit::Repo.new(repo_path)
 
-      # local repo の git remote で mirror があるかどうかチェック
       has_remote_mirror = false
       local_repo.remote_list.each do |remote|
         has_remote_mirror = true if remote === 'mirror'
@@ -46,11 +45,12 @@ module GitPusher
       end
 
       Dir.chdir(repo_path) do
-        # fetch する
+        puts "[#{Process.pid}][#{repo_name}]Pruning all stale branches of #{repo_name} ..."
+        local_repo.git.remote({}, 'prune', 'origin')
+
         puts "[#{Process.pid}][#{repo_name}]Fetching from #{src_repo.url} ..."
         local_repo.git.fetch({ :timeout => 300 }, 'origin')
 
-        # git push mirror --mirrorする
         puts "[#{Process.pid}][#{repo_name}]Pushing to #{mirror_repo.url} ..."
         local_repo.git.push({ :timeout => 300 }, 'mirror','--mirror')
       end
