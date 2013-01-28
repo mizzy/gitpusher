@@ -1,0 +1,3 @@
+require 'gitpusher'
+
+include GitPusher

@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
+require 'fileutils'
 require 'grit'
 
 module GitPusher
   class Runner
     def self.run
-      context = GitPusher::Context.instance
+      context = Context.instance
 
-      src  = GitPusher::Service::Factory.create(context.config[:src])
-      dest = GitPusher::Service::Factory.create(context.config[:dest])
-
-      base_dir = context.config[:base_dir]
       src_repos = src.repos
       num_per_process = src_repos.length / context.processes
       num_per_process += 1 unless src_repos.length % context.processes == 0
+      FileUtils::Verbose.mkpath base_dir unless File.directory? base_dir
       Dir.chdir(base_dir) do
         src_repos.each_slice(num_per_process) do |repos|
           fork do
             repos.each do |src_repo|
-              mirror src_repo, dest, base_dir
+              mirror src_repo
             end
           end
         end
@@ -26,7 +24,7 @@ module GitPusher
       Process.waitall
     end
 
-    def self.mirror(src_repo, dest, base_dir)
+    def self.mirror(src_repo)
       repo_name = File.basename(src_repo.url).gsub(/.git$/, '')
       repo_path = File.join(base_dir, repo_name)
       puts "[#{Process.pid}][#{repo_name}]Cheking #{src_repo.url} ..."
@@ -73,6 +71,18 @@ module GitPusher
           local_repo.git.push({ :timeout => 300 }, 'mirror', branch)
         end
       end
+    end
+
+    def self.src
+      Service::Factory.create(Context.instance.config[:src])
+    end
+
+    def self.dest
+      Service::Factory.create(Context.instance.config[:dest])
+    end
+
+    def self.base_dir
+      Context.instance.config[:base_dir]
     end
   end
 end
