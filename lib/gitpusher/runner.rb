@@ -26,10 +26,10 @@ module GitPusher
 
     def self.mirror(src_repo)
       repo_name = File.basename(src_repo.url).gsub(/.git$/, '')
-      repo_path = File.join(base_dir, repo_name)
-      puts "[#{Process.pid}][#{repo_name}]Cheking #{src_repo.url} ..."
+      repo_path = File.join(base_dir, "#{repo_name}.git")
       unless File.exist?(repo_path)
-        `git clone #{src_repo.url}`
+        puts "[#{Process.pid}][#{repo_name}]Cloning #{src_repo.url} ..."
+        `git clone --mirror #{src_repo.url}`
       end
 
       local_repo = Grit::Repo.new(repo_path)
@@ -40,36 +40,19 @@ module GitPusher
         has_remote_mirror = true if remote === 'mirror'
       end
 
+      mirror_repo = dest.repo(repo_name) || dest.create_repo(repo_name)
       unless has_remote_mirror
-        mirror_repo = dest.repo(repo_name) || dest.create_repo(repo_name)
         local_repo.git.remote({}, 'add', 'mirror', mirror_repo.url)
       end
 
-      local_repo.remotes.each do |remote|
-        next if remote.name == 'origin/HEAD'
-        next if remote.name =~ %r!mirror/.+!
-        branch = remote.name.gsub(%r!^origin/!, '')
+      Dir.chdir(repo_path) do
+        # fetch する
+        puts "[#{Process.pid}][#{repo_name}]Fetching from #{src_repo.url} ..."
+        local_repo.git.fetch({ :timeout => 300 }, 'origin')
 
-        matched = false
-        local_repo.branches.each do |x|
-          matched = true if x.name === branch
-        end
-
-        unless matched
-          local_repo.git.branch({}, branch, remote.name)
-        end
-
-        Dir.chdir(repo_path) do
-          local_repo.git.checkout({}, branch)
-
-          # pull する
-          puts "[#{Process.pid}][#{repo_name}]Pulling #{branch} ..."
-          local_repo.git.pull({ :timeout => 300 }, 'origin', branch)
-
-          # git push mirror #{branch} する
-          puts "[#{Process.pid}][#{repo_name}]Pushing #{branch} ..."
-          local_repo.git.push({ :timeout => 300 }, 'mirror', branch)
-        end
+        # git push mirror --mirrorする
+        puts "[#{Process.pid}][#{repo_name}]Pushing to #{mirror_repo.url} ..."
+        local_repo.git.push({ :timeout => 300 }, 'mirror','--mirror')
       end
     end
 
