@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'octokit'
   s.add_dependency 'pit'
 
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec', '>= 2.11'
   s.add_development_dependency 'rake'
 end
